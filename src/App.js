@@ -9,9 +9,8 @@ function App() {
   const [dataCountry, setDataCountry] = useState([]);
   const [dataState, setDataState] = useState([]);
   const [dataCity, setDataCity] = useState([]);
-  const [location, setLocation] = useState("");
+  // const [location, setLocation] = useState("");
   const REACT_APP_URI = process.env.REACT_APP_URI;
-  const url = `${REACT_APP_URI}/api/Weather?city=${location}`;
 
   useEffect(() => {
     const getAllCountries = async () => {
@@ -39,7 +38,7 @@ function App() {
     try {
       setLoading(true);
       setDataState([]);
-      setLocation("");
+      // setLocation("");
       fetchState(value).then((res) => {
         if (res) {
           setDataState(res);
@@ -58,7 +57,7 @@ function App() {
     try {
       setLoading(true);
       setDataCity([]);
-      setLocation("");
+      // setLocation("");
       fetchCity(value).then((res) => {
         if (res) {
           setDataCity(res);
@@ -74,9 +73,9 @@ function App() {
 
   const handleCityChange = (value) => {
     try {
-      setLocation("");
+      // setLocation("");
       setLoading(true);
-     
+
       var config = {
         method: "get",
         url: `${REACT_APP_URI}/api/Weather?city=${value}`,
@@ -86,7 +85,6 @@ function App() {
         .then(function (response) {
           setData(response.data);
           // console.log(response.data);
-          //REMOVE YG GA PERLU SEPERTI SETLOCATION , INI PAKE IF JIKA KOSONG MESSAGE TAMPILAKAN 
         })
         .catch(function (error) {
           console.log(error);
@@ -142,7 +140,6 @@ function App() {
             );
           })}
         </Select>
-       
       </div>
       <div className="container">
         <div className="top">
@@ -151,11 +148,20 @@ function App() {
             <p>{data.name}</p>
           </div>
           <div className="temp">
-            {data.main ? <h1>{data.main.temp.toFixed()}°F</h1> : null}
+            {data.main ? <h2>{data.main.temp.toFixed()}°F</h2> : null}
+          </div>
+          <div className="temp">
+            {data.main ? <h2>{data.main.temp_celsius.toFixed()}°C</h2> : null}
           </div>
           <div className="description">
             {data.weather ? <p>{data.weather[0].main}</p> : null}
           </div>
+
+          {data.message ? (
+            <div className="feels">
+              <p>{data.message}</p>
+            </div>
+          ) : null}
 
           <div className="feels">
             {data.main ? (
