@@ -10,8 +10,8 @@ function App() {
   const [dataState, setDataState] = useState([]);
   const [dataCity, setDataCity] = useState([]);
   const [location, setLocation] = useState("");
-
-  const url = `http://localhost:44332/api/Weather?city=${location}`;
+  const REACT_APP_URI = process.env.REACT_APP_URI;
+  const url = `${REACT_APP_URI}/api/Weather?city=${location}`;
 
   useEffect(() => {
     const getAllCountries = async () => {
@@ -35,33 +35,11 @@ function App() {
     getAllCountries();
   }, []);
 
-  // const searchLocation = (event) => {
-  //   if (event.key === "Enter") {
-  //     setLoading(true);
-
-  //     var config = {
-  //       method: "get",
-  //       url,
-  //     };
-
-  //     axios(config)
-  //       .then(function (response) {
-  //         setData(response.data);
-  //         console.log(response.data);
-  //       })
-  //       .catch(function (error) {
-  //         console.log(error);
-  //       });
-
-  //     setLoading(false);
-  //   }
-  // };
-
   const handleCountryChange = (value) => {
     try {
       setLoading(true);
       setDataState([]);
-
+      setLocation("");
       fetchState(value).then((res) => {
         if (res) {
           setDataState(res);
@@ -80,6 +58,7 @@ function App() {
     try {
       setLoading(true);
       setDataCity([]);
+      setLocation("");
       fetchCity(value).then((res) => {
         if (res) {
           setDataCity(res);
@@ -95,17 +74,19 @@ function App() {
 
   const handleCityChange = (value) => {
     try {
+      setLocation("");
       setLoading(true);
-      setLocation(value);
+     
       var config = {
         method: "get",
-        url,
+        url: `${REACT_APP_URI}/api/Weather?city=${value}`,
       };
 
       axios(config)
         .then(function (response) {
           setData(response.data);
-          console.log(response.data);
+          // console.log(response.data);
+          //REMOVE YG GA PERLU SEPERTI SETLOCATION , INI PAKE IF JIKA KOSONG MESSAGE TAMPILAKAN 
         })
         .catch(function (error) {
           console.log(error);
@@ -150,9 +131,6 @@ function App() {
         <Select
           placeholder="Select city"
           onChange={handleCityChange}
-          // onChange={(event) => setLocation(event.target.value)}
-          // onClick={(searchLocation(value))}
-          // onKeyDown={searchLocation(value)}
           loading={loading}
           style={{ width: "20%" }}
         >
@@ -164,12 +142,7 @@ function App() {
             );
           })}
         </Select>
-        {/* <input
-          value={location}
-          onChange={event => setLocation(event.target.value)}
-          onKeyPress={searchLocation}
-          placeholder='Enter Location'
-          type="text" /> */}
+       
       </div>
       <div className="container">
         <div className="top">
@@ -186,19 +159,27 @@ function App() {
 
           <div className="feels">
             {data.main ? (
-              <p className="bold">{data.main.feels_like.toFixed()}°F</p>
+              <>
+                <p className="bold">{data.main.feels_like.toFixed()}°F</p>
+                <p>Feels Like</p>
+              </>
             ) : null}
-            <p>Feels Like</p>
           </div>
           <div className="humidity">
-            {data.main ? <p className="bold">{data.main.humidity}%</p> : null}
-            <p>Humidity</p>
+            {data.main ? (
+              <>
+                <p className="bold">{data.main.humidity}%</p>
+                <p>Humidity</p>
+              </>
+            ) : null}
           </div>
           <div className="wind">
             {data.wind ? (
-              <p className="bold">{data.wind.speed.toFixed()} MPH</p>
+              <>
+                <p className="bold">{data.wind.speed.toFixed()} MPH</p>
+                <p>Wind Speed</p>
+              </>
             ) : null}
-            <p>Wind Speed</p>
           </div>
         </div>
       </div>
