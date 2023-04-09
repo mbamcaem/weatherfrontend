@@ -1,7 +1,7 @@
 const REACT_APP_APITOKEN = process.env.REACT_APP_APITOKEN;
 const REACT_APP_USEREMAIL = process.env.REACT_APP_USEREMAIL;
 const REACT_APP_UNIVERSALTOKEN = process.env.REACT_APP_UNIVERSALTOKEN;
-const REACT_APP_TOKEN_BEARER = process.env.REACT_APP_TOKEN_BEARER;
+
 
 
 export const fetchToken = async () => {
@@ -22,10 +22,10 @@ export const fetchToken = async () => {
   );
   return res.json();
 };
-export const fetchCountry = async () => {   
+export const fetchCountry = async (newtoken) => {   
     const options = {
       headers: {
-        Authorization: REACT_APP_TOKEN_BEARER,
+        Authorization: `Bearer ${newtoken}`
       },
     };
     const result = fetch(`${REACT_APP_UNIVERSALTOKEN}/api/countries`, options);
@@ -34,10 +34,10 @@ export const fetchCountry = async () => {
     
     
 };
-export const fetchState = async (country) => {   
+export const fetchState = async (country, newtoken) => {   
   const options = {
     headers: {
-      Authorization: REACT_APP_TOKEN_BEARER,
+      Authorization: `Bearer ${newtoken}`
     },
   };
   const result = fetch(`${REACT_APP_UNIVERSALTOKEN}/api/states/${country}`, options);
@@ -46,10 +46,10 @@ export const fetchState = async (country) => {
   
   
 };
-export const fetchCity = async (city) => {   
+export const fetchCity = async (city, newtoken) => {   
   const options = {
     headers: {
-      Authorization: REACT_APP_TOKEN_BEARER,
+      Authorization: `Bearer ${newtoken}`
     },
   };
   const result = fetch(`${REACT_APP_UNIVERSALTOKEN}/api/cities/${city}`, options);

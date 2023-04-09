@@ -9,14 +9,15 @@ function App() {
   const [dataCountry, setDataCountry] = useState([]);
   const [dataState, setDataState] = useState([]);
   const [dataCity, setDataCity] = useState([]);
-  // const [location, setLocation] = useState("");
+  const [newtoken, setNewtoken] = useState("");
   const REACT_APP_URI = process.env.REACT_APP_URI;
 
   useEffect(() => {
     const getAllCountries = async () => {
       try {
         setLoading(true);
-        fetchToken().then((res) => {
+        fetchToken().then((res) => {  
+          setNewtoken(res.auth_token);      
           fetchCountry(res.auth_token).then((res) => {
             if (res) {
               setDataCountry(res);
@@ -39,7 +40,7 @@ function App() {
       setLoading(true);
       setDataState([]);
       // setLocation("");
-      fetchState(value).then((res) => {
+      fetchState(value, newtoken).then((res) => {
         if (res) {
           setDataState(res);
         } else {
@@ -58,7 +59,7 @@ function App() {
       setLoading(true);
       setDataCity([]);
       // setLocation("");
-      fetchCity(value).then((res) => {
+      fetchCity(value, newtoken).then((res) => {
         if (res) {
           setDataCity(res);
         } else {
