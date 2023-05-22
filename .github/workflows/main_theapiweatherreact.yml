@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'TheApiWeatherReact'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9E46BA5BECA84010B6B34F568EAEBA6D }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D5276FA7DB4B4F1BAB9C54B2F4821E02 }}
           package: .
