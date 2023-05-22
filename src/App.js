@@ -5,13 +5,13 @@ import { fetchCountry, fetchToken, fetchState, fetchCity } from "./API";
 
 function App() {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
   const [dataCountry, setDataCountry] = useState([]);
   const [dataState, setDataState] = useState([]);
   const [dataCity, setDataCity] = useState([]);
   const [newtoken, setNewtoken] = useState("");
-  const REACT_APP_URI = process.env.REACT_APP_URI;
-
+  const REACT_APP_URI = process.env.REACT_APP_PROD === "PROD"? process.env.REACT_APP_WEATHER : process.env.REACT_APP_URI;
+//  console.log("url nya ", REACT_APP_URI);
   useEffect(() => {
     const getAllCountries = async () => {
       try {
@@ -73,25 +73,29 @@ function App() {
   };
 
   const handleCityChange = (value) => {
-    try {
-      // setLocation("");
+         console.log("isi city", value);
+
+    try {      
       setLoading(true);
 
       var config = {
         method: "get",
-        url: `${REACT_APP_URI}/api/Weather?city=${value}`,
+        url: `${REACT_APP_URI}/Weather?city=${value}`,       
       };
 
       axios(config)
         .then(function (response) {
+          console.log("asup ada", response.data);
           setData(response.data);
-          // console.log(response.data);
+          //console.log(response.data.success);
         })
         .catch(function (error) {
+          setData([]);
           console.log(error);
         });
       setLoading(false);
     } catch (err) {
+      setData([]);
       console.log(err);
     }
   };
@@ -145,14 +149,16 @@ function App() {
       <div className="container">
         <div className="top">
           <div className="location">
-            <p>{data.country}</p>
-            <p>{data.name}</p>
+            <p>{data.sys.country} - {data.name}</p>
           </div>
           <div className="temp">
             {data.main ? <h2>{data.main.temp.toFixed()}°F</h2> : null}
           </div>
           <div className="temp">
-            {data.main ? <h2>{data.main.temp_celsius.toFixed()}°C</h2> : null}
+            {data.main ? <h2>{
+            // data.main.temp_celsius.toFixed()
+            ((data.main.temp.toFixed() - 32) * 5 / 9).toFixed()
+            }°C</h2> : null}
           </div>
           <div className="description">
             {data.weather ? <p>{data.weather[0].main}</p> : null}
